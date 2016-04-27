@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -24,9 +25,7 @@ public class ListActivity extends AppCompatActivity {
                 "Eli", "Danika", "Lori", "Wyatt", "Chad"
         };
         final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; i++) {
-            list.add(values[i]);
-        }
+        Collections.addAll(list, values);
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
