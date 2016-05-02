@@ -1,16 +1,14 @@
 package org.novinger.jason.demoreader;
 
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewPropertyAnimator;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
 
@@ -18,14 +16,15 @@ import org.novinger.jason.demoreader.datamodels.Article;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class ListActivity extends AppCompatActivity {
+public class ArticleListActivity extends AppCompatActivity {
 
-    private final static int qty = 50;
+    private final static int qty = 250;
     private final static String feedUrl = "http://www.dailydot.com/api/v1/content/article/";
 
     @Override
@@ -33,40 +32,23 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        enableNetworkingPolicy();
+
+        final ArrayList<Article> list = getArticles();
+
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        RecyclerView.Adapter mAdapter = new ArticleAdapter(list);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void enableNetworkingPolicy() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        Article[] articles;
-        try {
-            articles = getFeedItems(getFeedUrl());
-        } catch (IOException ex) {
-            articles = new Article[0];
-            Log.d("Exception", ex.toString());
-        }
-
-        final ListView listview = (ListView) findViewById(R.id.listview);
-        final ArrayList<String> list = new ArrayList<>();
-        for (Article article : articles) {
-            list.add(article.toString());
-        }
-
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
-                final ViewPropertyAnimator viewPropertyAnimator = view.animate().setDuration(100).alpha(0);
-                viewPropertyAnimator.withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        list.remove(item);
-                        list.trimToSize();
-                        adapter.notifyDataSetChanged();
-                        view.setAlpha(1);
-                    }
-                });
-            }
-        });
     }
 
     @Override
@@ -89,6 +71,21 @@ public class ListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    private ArrayList<Article> getArticles() {
+        Article[] articles;
+        try {
+            articles = getFeedItems(getFeedUrl());
+        } catch (IOException ex) {
+            articles = new Article[0];
+            Log.d("Exception", ex.toString());
+        }
+
+        final ArrayList<Article> list = new ArrayList<>();
+        Collections.addAll(list, articles);
+        return list;
     }
 
     private Article[] getFeedItems(String url) throws IOException {
