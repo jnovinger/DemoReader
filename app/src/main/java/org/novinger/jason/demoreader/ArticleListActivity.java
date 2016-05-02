@@ -73,29 +73,23 @@ public class ArticleListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @NonNull
     private ArrayList<Article> getArticles() {
-        Article[] articles;
+        String url = getFeedUrl();
+        OkHttpClient client = new OkHttpClient();
+        ArrayList<Article> articles = new ArrayList<>();
+
         try {
-            articles = getFeedItems(getFeedUrl());
+            Request request = new Request.Builder().url(url).build();
+            Response response = client.newCall(request).execute();
+            String json = response.body().string();
+            Gson gson = new Gson();
+            Article[] articles_array = gson.fromJson(json, Article[].class);
+            Collections.addAll(articles, articles_array);
         } catch (IOException ex) {
-            articles = new Article[0];
-            Log.d("Exception", ex.toString());
+            // nothing to see here
         }
 
-        final ArrayList<Article> list = new ArrayList<>();
-        Collections.addAll(list, articles);
-        return list;
-    }
-
-    private Article[] getFeedItems(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder().url(url).build();
-        Response response = client.newCall(request).execute();
-        String json = response.body().string();
-        Gson gson = new Gson();
-        return gson.fromJson(json, Article[].class);
+        return articles;
     }
 
     private String getFeedUrl() {
