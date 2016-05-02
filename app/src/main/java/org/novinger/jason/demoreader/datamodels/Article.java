@@ -1,5 +1,7 @@
 package org.novinger.jason.demoreader.datamodels;
 
+import java.util.ArrayList;
+
 /**
  * Created by jason on 4/27/16.
  */
@@ -8,14 +10,14 @@ public class Article {
     private int realId;
     private String headline;
     private String slug;
-    private Author[] authors;
+    private ArrayList<Author> authors;
     private String summary;
     private String url;
     private LeadArt lead_art;
 
     public Article() {}
 
-    public Article(String id, String headline, String slug, Author[] authors, String url, String summary, LeadArt lead_art) {
+    public Article(String id, String headline, String slug, ArrayList<Author> authors, String url, String summary, LeadArt lead_art) {
         this.id = id;
         this.realId = mungeId(id);
         this.headline = headline;
@@ -47,13 +49,13 @@ public class Article {
         return slug;
     }
 
-    public Author[] getAuthors() {
+    public ArrayList<Author> getAuthors() {
         return authors;
     }
 
     public Author getPrimaryAuthor() {
-        if (authors.length > 0) {
-            return authors[0];
+        if (authors.size() > 0) {
+            return authors.get(0);
         }
 
         return new Author();
