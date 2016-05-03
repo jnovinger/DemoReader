@@ -15,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Provides a POJO for deserializing article feeds from the Dailydot with gson.
+ * Provides an interface to a Daily Dot API feed
  */
 public class ArticleFeed {
 

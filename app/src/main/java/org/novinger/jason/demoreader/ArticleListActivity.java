@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.novinger.jason.demoreader.datamodels.ArticleFeed;
-
 public class ArticleListActivity extends AppCompatActivity {
 
     private final static int mQuantity = 250;
