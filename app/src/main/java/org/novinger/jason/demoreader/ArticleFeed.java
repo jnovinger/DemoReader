@@ -1,8 +1,10 @@
-package org.novinger.jason.demoreader.datamodels;
+package org.novinger.jason.demoreader;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
+
+import org.novinger.jason.demoreader.datamodels.Article;
 
 import java.io.IOException;
 import java.util.ArrayList;
