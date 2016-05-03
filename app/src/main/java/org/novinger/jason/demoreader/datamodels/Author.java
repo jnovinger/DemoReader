@@ -1,34 +1,30 @@
 package org.novinger.jason.demoreader.datamodels;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- * Created by jason on 4/27/16.
+ * Provides a POJO for deserializing authors from the Dailydot feed with gson.
  */
 public class Author {
-    private String name;
-    private String url;
-    private String slug;
 
-    public Author() {}
+    @SerializedName("name")
+    private String mName;
 
-    public Author(String name, String url, String slug) {
-        this.name = name;
-        this.url = url;
-        this.slug = slug;
-    }
+    @SerializedName("url")
+    private String mUrl;
 
-    public String toString() {
-        return name;
-    }
+    @SerializedName("slug")
+    private String mSlug;
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public String getUrl() {
-        return url;
+        return mUrl;
     }
 
     public String getSlug() {
-        return slug;
+        return mSlug;
     }
 }

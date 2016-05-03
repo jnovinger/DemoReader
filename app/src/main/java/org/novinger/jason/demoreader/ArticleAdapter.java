@@ -52,7 +52,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Article article = mArticles.get(position);
         holder.mHeadline.setText(article.getHeadline());
-        holder.mByline.setText(article.getPrimaryAuthor().toString());
+        holder.mByline.setText(article.getPrimaryAuthor().getName());
         Glide.with(holder.mContext).load(article.getLeadArtURL()).into(holder.mLeadArt);
     }
 
