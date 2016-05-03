@@ -1,31 +1,19 @@
 package org.novinger.jason.demoreader;
 
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
-
-import org.novinger.jason.demoreader.datamodels.Article;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import org.novinger.jason.demoreader.datamodels.ArticleFeed;
 
 public class ArticleListActivity extends AppCompatActivity {
 
-    private final static int qty = 250;
-    private final static String feedUrl = "http://www.dailydot.com/api/v1/content/article/";
+    private final static int mQuantity = 250;
+    private final static String mFeedUrl = "http://www.dailydot.com/api/v1/content/article/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +22,7 @@ public class ArticleListActivity extends AppCompatActivity {
 
         enableNetworkingPolicy();
 
-        final ArrayList<Article> list = getArticles();
+        ArticleFeed feed = new ArticleFeed(getFeedUrl());
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -42,7 +30,7 @@ public class ArticleListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecyclerView.Adapter mAdapter = new ArticleAdapter(list);
+        RecyclerView.Adapter mAdapter = new ArticleAdapter(feed.getArticles());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -73,30 +61,12 @@ public class ArticleListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<Article> getArticles() {
-        String url = getFeedUrl();
-        OkHttpClient client = new OkHttpClient();
-        ArrayList<Article> articles = new ArrayList<>();
-
-        try {
-            Request request = new Request.Builder().url(url).build();
-            Response response = client.newCall(request).execute();
-            String json = response.body().string();
-            Gson gson = new Gson();
-            Article[] articles_array = gson.fromJson(json, Article[].class);
-            Collections.addAll(articles, articles_array);
-        } catch (IOException ex) {
-            // nothing to see here
-        }
-
-        return articles;
-    }
 
     private String getFeedUrl() {
-        if(qty > 0) {
-           return feedUrl + "?quantity=" + Integer.toString(qty);
+        if(mQuantity > 0) {
+           return mFeedUrl + "?quantity=" + Integer.toString(mQuantity);
         }
 
-        return feedUrl;
+        return mFeedUrl;
     }
 }
