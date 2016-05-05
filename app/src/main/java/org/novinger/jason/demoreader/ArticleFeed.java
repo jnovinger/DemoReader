@@ -19,6 +19,7 @@ import okhttp3.Response;
  */
 public class ArticleFeed {
 
+    public static class ArticleArrayList extends ArrayList<Article> {}
     private String mFeedUrl;
 
     public ArticleFeed(String url) {
@@ -27,20 +28,16 @@ public class ArticleFeed {
 
     public ArrayList<Article> getArticles() {
         OkHttpClient client = new OkHttpClient();
-        ArrayList<Article> articles = new ArrayList<>();
 
         try {
             Request request = new Request.Builder().url(mFeedUrl).build();
             Response response = client.newCall(request).execute();
             String json = response.body().string();
             Gson gson = new Gson();
-            Article[] articles_array = gson.fromJson(json, Article[].class);
-            Collections.addAll(articles, articles_array);
+            return gson.fromJson(json, ArticleArrayList.class);
         } catch (IOException ex) {
-            // nothing to see here
+            return new ArrayList<Article>();
         }
-        Log.d("getArticles()", Integer.toString(articles.size()));
 
-        return articles;
     }
 }
