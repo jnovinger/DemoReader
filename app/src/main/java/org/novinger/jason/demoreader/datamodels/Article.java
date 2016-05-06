@@ -30,6 +30,12 @@ public class Article {
     @SerializedName("lead_art")
     private LeadArt mLeadArt;
 
+    @SerializedName("primary_section_title")
+    private String mSection;
+
+    @SerializedName("pub_date")
+    private String mPubDate;
+
     public String getId() {
         return mId;
     }
@@ -72,6 +78,14 @@ public class Article {
 
     public LeadArt getLeadArt() {
         return mLeadArt;
+    }
+
+    public String getSection() {
+        return mSection;
+    }
+
+    public String getPubDate() {
+        return mPubDate;
     }
 
     public String toString() {

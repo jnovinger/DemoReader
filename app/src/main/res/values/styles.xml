@@ -5,18 +5,22 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="appText" parent="@android:style/TextAppearance">
+    <style name="headerText" parent="@android:style/TextAppearance">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:shadowRadius">25.0</item>
         <item name="android:shadowColor">#000000</item>
+    </style>
+
+    <style name="headerText.headline">
+        <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">serif</item>
     </style>
 
-    <style name="appText.headline">
-        <item name="android:textSize">18sp</item>
+    <style name="headerText.byline">
+        <item name="android:textSize">9sp</item>
     </style>
 
-    <style name="appText.byline">
+    <style name="headerText.section">
         <item name="android:textSize">9sp</item>
     </style>
 

@@ -26,6 +26,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mHeadline;
         public TextView mByline;
+        public TextView mSection;
         public ImageView mLeadArt;
 
         public ViewHolder(View articleView) {
@@ -33,6 +34,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
             mHeadline = (TextView) articleView.findViewById(R.id.headline);
             mByline = (TextView) articleView.findViewById(R.id.byline);
+            mSection = (TextView) articleView.findViewById(R.id.section);
             mLeadArt = (ImageView) articleView.findViewById(R.id.lead_art);
         }
     }
@@ -66,8 +68,16 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                 if ("".equals(byline)) {
                     holder.mByline.setVisibility(View.GONE);
                 } else {
-                    holder.mByline.setText(article.getByline());
+                    holder.mByline.setText("By " + article.getByline());
                 }
+
+                String section = article.getSection();
+                if (section == null) {
+                    holder.mSection.setVisibility(View.GONE);
+                } else {
+                    holder.mSection.setText(section);
+                }
+
                 return false;
             }
         };
