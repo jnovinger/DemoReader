@@ -1,79 +1,95 @@
 package org.novinger.jason.demoreader.datamodels;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
- * Created by jason on 4/27/16.
+ * POJO for deserializing articles from the Dailydot feed with gson.
  */
 public class Article {
-    private String id;
-    private int realId;
-    private String headline;
-    private String slug;
-    private ArrayList<Author> authors;
-    private String summary;
-    private String url;
-    private LeadArt lead_art;
 
-    public Article() {}
+    @SerializedName("id")
+    private String mId;
 
-    public Article(String id, String headline, String slug, ArrayList<Author> authors, String url, String summary, LeadArt lead_art) {
-        this.id = id;
-        this.realId = mungeId(id);
-        this.headline = headline;
-        this.slug = slug;
-        this.authors = authors;
-        this.url = url;
-        this.summary = summary;
-        this.lead_art = lead_art;
-    }
+    @SerializedName("headline")
+    private String mHeadline;
 
-    private int mungeId(String id) {
-        String[] parts = id.split(".");
-        return Integer.parseInt(parts[2]);
-    }
+    @SerializedName("slug")
+    private String mSlug;
 
-    public String toString() {
-        return getHeadline() + " — " + getPrimaryAuthor().getName();
-    }
+    @SerializedName("authors")
+    private ArrayList<Author> mAuthors;
 
-    public int getId() {
-        return realId;
+    @SerializedName("summary")
+    private String mSummary;
+
+    @SerializedName("url")
+    private String mUrl;
+
+    @SerializedName("lead_art")
+    private LeadArt mLeadArt;
+
+    @SerializedName("primary_section_title")
+    private String mSection;
+
+    @SerializedName("pub_date")
+    private String mPubDate;
+
+    public String getId() {
+        return mId;
     }
 
     public String getHeadline() {
-        return headline;
-    }
-
-    public String getSlug() {
-        return slug;
+        return mHeadline;
     }
 
     public ArrayList<Author> getAuthors() {
-        return authors;
+        return mAuthors;
     }
 
     public Author getPrimaryAuthor() {
-        if (authors.size() > 0) {
-            return authors.get(0);
+        if (null != mAuthors && mAuthors.size() > 0) {
+            return mAuthors.get(0);
         }
 
         return new Author();
     }
 
-    public String getSummary() {
-        return summary;
-    }
-
-    public String getUrl() {
-        return url;
+    public String getByline() {
+        String byline = "";
+        ArrayList<Author> authors = getAuthors();
+        for (int i = 0; i < authors.size(); i++) {
+            if (i > 0) {
+                byline += ", ";
+            }
+            byline += authors.get(i).getName();
+        }
+        return byline;
     }
 
     public String getLeadArtURL() {
-        if (null == lead_art) {
+        if (null == mLeadArt) {
             return "";
         }
 
-        return lead_art.getExtraSmall();
+        return mLeadArt.getExtraSmall();
+    }
+
+    public LeadArt getLeadArt() {
+        return mLeadArt;
+    }
+
+    public String getSection() {
+        return mSection;
+    }
+
+    public String getPubDate() {
+        return mPubDate;
+    }
+
+    public String toString() {
+        return getHeadline() + " — " + getPrimaryAuthor().getName();
     }
 }
+
