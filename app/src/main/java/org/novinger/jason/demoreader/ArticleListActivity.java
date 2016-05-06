@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 public class ArticleListActivity extends AppCompatActivity {
 
-    private final static int mQuantity = 250;
+    private final static int mQuantity = 25;
     private final static String mFeedUrl = "http://www.dailydot.com/api/v1/content/article/";
 
     @Override

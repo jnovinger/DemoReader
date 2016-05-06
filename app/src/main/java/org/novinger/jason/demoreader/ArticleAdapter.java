@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import org.novinger.jason.demoreader.datamodels.Article;
 
@@ -24,15 +27,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         public TextView mHeadline;
         public TextView mByline;
         public ImageView mLeadArt;
-        public Context mContext;
 
-        public ViewHolder(View articleView, Context context) {
+        public ViewHolder(View articleView) {
             super(articleView);
 
             mHeadline = (TextView) articleView.findViewById(R.id.headline);
             mByline = (TextView) articleView.findViewById(R.id.byline);
             mLeadArt = (ImageView) articleView.findViewById(R.id.lead_art);
-            mContext = context;
         }
     }
 
@@ -45,15 +46,33 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View articleView = inflater.inflate(R.layout.article_list_item_view, parent, false);
-        return new ViewHolder(articleView, context);
+        return new ViewHolder(articleView);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Article article = mArticles.get(position);
-        holder.mHeadline.setText(article.getHeadline());
-        holder.mByline.setText(article.getPrimaryAuthor().getName());
-        Glide.with(holder.mContext).load(article.getLeadArtURL()).into(holder.mLeadArt);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Article article = mArticles.get(position);
+
+        RequestListener listener = new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                holder.mHeadline.setText(article.getHeadline());
+                String byline = article.getByline();
+                if ("".equals(byline)) {
+                    holder.mByline.setVisibility(View.GONE);
+                } else {
+                    holder.mByline.setText(article.getByline());
+                }
+                return false;
+            }
+        };
+        Context context = holder.mHeadline.getContext().getApplicationContext();
+        Glide.with(context).load(article.getLeadArt().getSmall()).listener(listener).into(holder.mLeadArt);
     }
 
     @Override

@@ -50,12 +50,28 @@ public class Article {
         return new Author();
     }
 
+    public String getByline() {
+        String byline = "";
+        ArrayList<Author> authors = getAuthors();
+        for (int i = 0; i < authors.size(); i++) {
+            if (i > 0) {
+                byline += ", ";
+            }
+            byline += authors.get(i).getName();
+        }
+        return byline;
+    }
+
     public String getLeadArtURL() {
         if (null == mLeadArt) {
             return "";
         }
 
         return mLeadArt.getExtraSmall();
+    }
+
+    public LeadArt getLeadArt() {
+        return mLeadArt;
     }
 
     public String toString() {
